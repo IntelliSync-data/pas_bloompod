@@ -1,0 +1,1131 @@
+/* =====================================================================
+   Give a Gift / Planting a Seed — giao diện theo mockup_01.png
+   Mọi class đều có tiền tố gg- và nằm trong .gg-page để không đụng
+   style.css của Bloom (header/footer dùng style.css như các trang khác).
+   ===================================================================== */
+
+:root {
+  --gg-green: #2f6b3f;
+  --gg-green-dark: #1e4f2d;
+  --gg-green-hover: #3d7f4e;
+  --gg-leaf: #4f8f3a;
+  --gg-mint: #eef4e6;
+  --gg-mint-2: #e4eedb;
+  --gg-card: #f6f9f1;
+  --gg-cream: #fbfcf8;
+  --gg-text: #2e3a31;
+  --gg-muted: #5c675f;
+  --gg-line: #dfe8d6;
+  --gg-pill: #edf1ea;
+  --gg-shadow: 0 10px 28px rgba(35, 70, 40, .08);
+  --gg-font: "Nunito", "Raleway", Helvetica, Arial, sans-serif;
+  --gg-hand: "Patrick Hand", "Comic Sans MS", cursive;
+  --gg-script: "Caveat", "Patrick Hand", cursive;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.gg-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.gg-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.gg-page,
+.gg-modal {
+  font-family: var(--gg-font);
+  color: var(--gg-text);
+  line-height: 1.5;
+}
+
+.gg-page {
+  background: var(--gg-cream);
+  overflow: hidden;
+}
+
+.gg-page *,
+.gg-modal * {
+  box-sizing: border-box;
+}
+
+.gg-icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: currentColor;
+}
+
+.gg-container {
+  width: min(1240px, 100% - 64px);
+  margin-inline: auto;
+}
+
+/* ----- Chữ dùng chung ----- */
+.gg-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .32em;
+  color: var(--gg-green-dark);
+}
+
+.gg-eyebrow .gg-icon {
+  font-size: 22px;
+  color: var(--gg-leaf);
+}
+
+.gg-eyebrow-lead .gg-icon {
+  margin-left: -4px;
+}
+
+.gg-title {
+  margin: 0 0 14px;
+  font-family: var(--gg-hand);
+  font-weight: 400;
+  font-size: clamp(34px, 3.4vw, 46px);
+  line-height: 1.05;
+  color: var(--gg-green-dark);
+  -webkit-text-stroke: .6px currentColor;
+}
+
+.gg-text {
+  margin: 0;
+  font-size: 15px;
+  color: var(--gg-muted);
+}
+
+/* ----- Nút ----- */
+.gg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 11px 18px;
+  background: var(--gg-green);
+  color: #fff;
+  font: 700 14px/1.2 var(--gg-font);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+
+.gg-btn:hover {
+  background: var(--gg-green-hover);
+}
+
+.gg-btn:active {
+  transform: translateY(1px);
+}
+
+.gg-btn:disabled {
+  background: #a5b0a8;
+  cursor: not-allowed;
+}
+
+.gg-btn .gg-icon {
+  font-size: 18px;
+}
+
+.gg-btn-block {
+  width: 100%;
+}
+
+.gg-btn-lg {
+  padding: 16px 32px;
+  font-size: 17px;
+  box-shadow: 0 10px 22px rgba(47, 107, 63, .22);
+}
+
+.gg-btn-lg .gg-icon {
+  font-size: 22px;
+}
+
+.gg-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 26px;
+  border: 2px solid var(--gg-green);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .7);
+  color: var(--gg-green-dark);
+  font-weight: 700;
+  font-size: 16px;
+  transition: background .2s, color .2s;
+}
+
+.gg-btn-outline:hover {
+  background: var(--gg-green);
+  color: #fff;
+}
+
+.gg-page a:focus-visible,
+.gg-page button:focus-visible,
+.gg-page select:focus-visible,
+.gg-modal button:focus-visible {
+  outline: 3px solid #8fbf6a;
+  outline-offset: 2px;
+}
+
+/* =====================================================================
+   HEADER (lấy từ index.html / styles.css)
+   ===================================================================== */
+.gg-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 78px;
+  padding: 0 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 254, 249, .92);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(20, 80, 50, .07);
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: #183a2b;
+}
+
+.gg-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 180px;
+}
+
+.gg-brand-mark {
+  font-size: 34px;
+  line-height: .8;
+  color: #166b43;
+  font-weight: 500;
+  transform: rotate(-2deg);
+}
+
+.gg-brand strong {
+  display: block;
+  color: #166b43;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.gg-brand small {
+  display: block;
+  color: #6d756f;
+  font-size: 8px;
+  margin-top: 3px;
+  letter-spacing: .15px;
+}
+
+.gg-nav {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  font-size: 13px;
+  color: #263d31;
+}
+
+.gg-nav a {
+  padding: 28px 0 8px;
+  border-bottom: 2px solid transparent;
+}
+
+.gg-nav a.is-active,
+.gg-nav a:hover {
+  color: #166b43;
+  border-color: #166b43;
+}
+
+.gg-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gg-language {
+  border: 1px solid #dce6d7;
+  background: #fff;
+  border-radius: 20px;
+  padding: 8px 14px;
+  color: #183a2b;
+  font: inherit;
+}
+
+.gg-header-cta {
+  background: #166b43;
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 23px;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(22, 107, 67, .16);
+}
+
+.gg-menu-toggle {
+  display: none;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  color: #166b43;
+}
+
+/* Bấm vào link trong trang thì section không bị header che */
+.gg-page section {
+  scroll-margin-top: 78px;
+}
+
+@media (max-width: 1100px) {
+  .gg-nav { gap: 14px; }
+  .gg-header-cta { display: none; }
+}
+
+@media (max-width: 760px) {
+  .gg-header { height: 68px; padding: 0 5%; }
+  .gg-nav,
+  .gg-header-actions { display: none; }
+  .gg-menu-toggle { display: block; }
+  .gg-brand strong { font-size: 20px; }
+  .gg-page section { scroll-margin-top: 68px; }
+
+  /* Menu mobile mở ra bên dưới header */
+  .gg-header.is-open .gg-nav {
+    display: flex;
+    position: absolute;
+    top: 68px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 5% 18px;
+    background: #fffef9;
+    box-shadow: 0 12px 20px rgba(20, 60, 35, .08);
+  }
+
+  .gg-header.is-open .gg-nav a { padding: 10px 0; }
+
+  .gg-header.is-open .gg-header-actions {
+    display: flex;
+    position: absolute;
+    top: 80px;
+    right: 5%;
+  }
+}
+
+/* =====================================================================
+   HERO
+   ===================================================================== */
+.gg-hero {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  background: var(--gg-cream);
+}
+
+.gg-hero-media {
+  position: absolute;
+  inset: 0 0 0 30%;
+  background: url("../images/01_Hero_Planting_a_Seed.png") 62% center / cover no-repeat;
+}
+
+/* Làm mờ mép trái ảnh để chữ nổi trên nền sáng */
+.gg-hero-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--gg-cream) 0%, rgba(251, 252, 248, .85) 14%, rgba(251, 252, 248, 0) 42%);
+}
+
+.gg-hero-media::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 60px;
+  background: linear-gradient(0deg, var(--gg-cream), rgba(251, 252, 248, 0));
+}
+
+.gg-hero-inner {
+  position: relative;
+  z-index: 2;
+  padding-block: 60px 70px;
+}
+
+.gg-hero-copy {
+  max-width: 520px;
+}
+
+.gg-hero .gg-eyebrow {
+  font-size: 15px;
+}
+
+.gg-eyebrow-sprout {
+  font-size: 28px !important;
+}
+
+.gg-hero-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 4px 0 18px;
+  font-family: var(--gg-hand);
+  font-weight: 400;
+  font-size: clamp(56px, 6.4vw, 88px);
+  line-height: 1;
+  color: var(--gg-green-dark);
+  -webkit-text-stroke: 1.4px currentColor;
+}
+
+.gg-hero-heart {
+  font-size: .5em;
+  -webkit-text-stroke: 0;
+  color: var(--gg-green);
+}
+
+.gg-hero-lead {
+  margin: 0 0 26px;
+  font-size: 20px;
+  line-height: 1.45;
+  color: #34433a;
+}
+
+.gg-hero-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gg-hero-values li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #34433a;
+}
+
+.gg-hero-values .gg-icon {
+  font-size: 28px;
+  color: var(--gg-green);
+}
+
+.gg-hero-note {
+  position: absolute;
+  z-index: 2;
+  top: 40px;
+  right: 3.5%;
+  margin: 0;
+  font: 600 42px/1 var(--gg-script);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, .35);
+  transform: rotate(-8deg);
+}
+
+.gg-hero-note .gg-icon {
+  font-size: 38px;
+  margin-top: 4px;
+}
+
+.gg-hero-tag {
+  position: absolute;
+  z-index: 2;
+  right: 2.5%;
+  bottom: 70px;
+  margin: 0;
+  padding: 14px 22px;
+  border-radius: 18px 18px 18px 4px;
+  background: rgba(240, 246, 230, .92);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .12);
+  font: 500 24px/1.05 var(--gg-script);
+  color: var(--gg-green-dark);
+  transform: rotate(-10deg);
+}
+
+/* =====================================================================
+   THE GIFT
+   ===================================================================== */
+.gg-gift {
+  padding: 40px 0 44px;
+  background: linear-gradient(180deg, var(--gg-mint) 0%, #f5f8ef 100%);
+}
+
+.gg-gift-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1.15fr .9fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.gg-gift-copy .gg-text {
+  max-width: 400px;
+}
+
+.gg-benefits {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gg-benefits li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 6px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .55);
+  border: 1px solid #e3ebd9;
+  font-size: 12.5px;
+  line-height: 1.3;
+  text-align: center;
+  color: #3c4a40;
+}
+
+.gg-benefits .gg-icon {
+  font-size: 30px;
+  color: var(--gg-green);
+}
+
+.gg-gift-visual {
+  position: relative;
+  align-self: stretch;
+  min-height: 300px;
+}
+
+.gg-gift-visual img {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 24px;
+  /* hoà mép ảnh vào nền xanh nhạt */
+  -webkit-mask-image: radial-gradient(ellipse 72% 78% at 50% 52%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 72% 78% at 50% 52%, #000 62%, transparent 100%);
+}
+
+.gg-gift-badge {
+  position: absolute;
+  top: 2%;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 104px;
+  height: 104px;
+  margin: 0;
+  border: 1.5px solid #9db98a;
+  border-radius: 50%;
+  background: rgba(251, 252, 248, .85);
+  font: 500 19px/1 var(--gg-script);
+  color: var(--gg-green-dark);
+  text-align: center;
+  transform: rotate(-8deg);
+}
+
+.gg-gift-badge .gg-icon {
+  font-size: 15px;
+  vertical-align: -1px;
+}
+
+.gg-gift-card {
+  padding: 22px 24px;
+  border-radius: 20px;
+  background: var(--gg-card);
+  border: 1px solid #e4ecdb;
+  box-shadow: var(--gg-shadow);
+}
+
+.gg-gift-card h3 {
+  margin: 0 0 14px;
+  font-family: var(--gg-font);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--gg-green-dark);
+}
+
+.gg-checklist {
+  margin: 0;
+  padding: 0 0 18px;
+  list-style: none;
+  border-bottom: 1px solid var(--gg-line);
+}
+
+.gg-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 14.5px;
+}
+
+.gg-checklist .gg-icon {
+  font-size: 19px;
+  color: var(--gg-green);
+}
+
+.gg-contribution {
+  display: flex;
+  gap: 12px;
+  padding-top: 18px;
+}
+
+.gg-contribution > .gg-icon {
+  font-size: 46px;
+  color: var(--gg-leaf);
+}
+
+.gg-contribution p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--gg-muted);
+}
+
+.gg-contribution .gg-contribution-title {
+  margin-bottom: 8px;
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--gg-green-dark);
+}
+
+/* =====================================================================
+   CHOOSE A CHILD
+   ===================================================================== */
+.gg-children {
+  padding: 46px 0 50px;
+  background: #fff;
+}
+
+.gg-children-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+.gg-children-lead {
+  font-size: 16px;
+  color: #3d4a41;
+}
+
+.gg-quote-box {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 360px;
+  margin: 0 0 6px;
+  padding: 16px 22px;
+  border-radius: 16px;
+  background: var(--gg-mint);
+}
+
+.gg-quote-box > .gg-icon {
+  font-size: 36px;
+  color: var(--gg-leaf);
+}
+
+.gg-quote-box p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #4a574d;
+}
+
+.gg-quote-heart {
+  font-size: 15px;
+  vertical-align: -2px;
+  color: var(--gg-green);
+}
+
+.gg-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 26px 0 20px;
+}
+
+.gg-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.gg-pill {
+  min-width: 124px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--gg-pill);
+  color: #3c4a40;
+  font: 600 15px/1.2 var(--gg-font);
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.gg-pill:hover {
+  background: var(--gg-mint-2);
+}
+
+.gg-pill.is-active {
+  background: var(--gg-green);
+  color: #fff;
+}
+
+.gg-sort select {
+  min-width: 210px;
+  padding: 10px 44px 10px 18px;
+  border: 1.5px solid var(--gg-line);
+  border-radius: 999px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%232e3a31' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 16px center / 16px no-repeat;
+  color: var(--gg-text);
+  font: 600 15px/1.2 var(--gg-font);
+  cursor: pointer;
+}
+
+/* ----- Carousel ----- */
+.gg-carousel {
+  position: relative;
+}
+
+.gg-track {
+  --gg-gap: 18px;
+  --gg-per-view: 5;
+  display: flex;
+  gap: var(--gg-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 4px 2px 14px;
+  scrollbar-width: none;
+}
+
+.gg-track::-webkit-scrollbar {
+  display: none;
+}
+
+.gg-carousel-btn {
+  position: absolute;
+  z-index: 3;
+  top: 38%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--gg-line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--gg-text);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .12);
+  cursor: pointer;
+}
+
+.gg-carousel-btn .gg-icon {
+  font-size: 22px;
+}
+
+.gg-carousel-next {
+  right: -18px;
+}
+
+.gg-carousel-prev {
+  left: -18px;
+}
+
+.gg-carousel-prev .gg-icon {
+  transform: scaleX(-1);
+}
+
+.gg-card {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 calc((100% - (var(--gg-per-view) - 1) * var(--gg-gap)) / var(--gg-per-view));
+  scroll-snap-align: start;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(30, 60, 35, .1);
+  transition: transform .25s, box-shadow .25s;
+}
+
+.gg-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(30, 60, 35, .14);
+}
+
+.gg-card-media {
+  position: relative;
+  aspect-ratio: 1 / .92;
+  background: var(--gg-mint);
+}
+
+.gg-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gg-age {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #2f3b33;
+  background: #d9eefc;
+}
+
+.gg-card-media .gg-age {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+}
+
+/* Màu nhãn tuổi xoay vòng theo nhóm tuổi */
+.gg-age-0 { background: #d9eefc; }
+.gg-age-1 { background: #fdf0c2; }
+.gg-age-2 { background: #fbdde4; }
+.gg-age-3 { background: #dff1d5; }
+
+.gg-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px 14px 16px;
+}
+
+.gg-card-body h3 {
+  margin: 0 0 4px;
+  font-family: var(--gg-hand);
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--gg-green-dark);
+  -webkit-text-stroke: .4px currentColor;
+}
+
+.gg-card-body p {
+  flex: 1;
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--gg-muted);
+}
+
+.gg-card.is-gifted {
+  opacity: .55;
+  filter: grayscale(.7);
+}
+
+.gg-card.is-gifted:hover {
+  transform: none;
+}
+
+.gg-status {
+  margin: 8px 0 0;
+  text-align: center;
+  color: var(--gg-muted);
+}
+
+.gg-status:empty {
+  display: none;
+}
+
+/* =====================================================================
+   LET US CHOOSE
+   ===================================================================== */
+.gg-choose {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30% 1fr 22%;
+  align-items: center;
+  min-height: 290px;
+  background: linear-gradient(100deg, #f1f6e8 0%, #f6f9ef 50%, #eaf3de 100%);
+}
+
+.gg-choose-media {
+  align-self: stretch;
+  min-height: 290px;
+  background: url("../images/04_Let_Us_Choose.png") 38% center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
+}
+
+.gg-choose-copy {
+  position: relative;
+  z-index: 2;
+  padding: 40px 24px;
+}
+
+.gg-choose-copy .gg-text {
+  margin-bottom: 22px;
+  color: #3d4a41;
+}
+
+.gg-choose-side {
+  position: relative;
+  align-self: stretch;
+  min-height: 290px;
+}
+
+.gg-choose-note {
+  position: absolute;
+  z-index: 2;
+  top: 34px;
+  right: 14%;
+  margin: 0;
+  font: 500 32px/1.05 var(--gg-script);
+  color: var(--gg-green-dark);
+  transform: rotate(-12deg);
+}
+
+.gg-choose-note .gg-icon {
+  font-size: 24px;
+  vertical-align: -2px;
+}
+
+.gg-leaf {
+  position: absolute;
+  width: 64px;
+  height: 38px;
+  color: #6faa4c;
+  opacity: .9;
+}
+
+.gg-leaf-1 { right: 4%; bottom: 18px; transform: rotate(-30deg); color: #5a9a3f; }
+.gg-leaf-2 { right: 22%; bottom: 46px; width: 52px; transform: rotate(-70deg) scaleX(-1); }
+.gg-leaf-3 { right: 0; bottom: 110px; width: 46px; transform: rotate(20deg); color: #8cc06a; }
+.gg-leaf-4 { right: 36%; bottom: 8px; width: 44px; transform: rotate(-120deg); color: #8cc06a; }
+
+/* =====================================================================
+   POPUP TẶNG QUÀ
+   ===================================================================== */
+.gg-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(18, 45, 28, .5);
+  backdrop-filter: blur(3px);
+}
+
+.gg-modal-dialog {
+  position: relative;
+  width: min(540px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 30px 28px 26px;
+  border-radius: 24px;
+  background: var(--gg-cream);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .25);
+}
+
+.gg-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--gg-mint);
+  color: var(--gg-green-dark);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.gg-modal-child {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.gg-modal-child img {
+  flex: none;
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.gg-modal-child .gg-eyebrow {
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.gg-modal-child h3 {
+  margin: 0 0 6px;
+  font-family: var(--gg-hand);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--gg-green-dark);
+  -webkit-text-stroke: .5px currentColor;
+}
+
+.gg-modal-quote {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: var(--gg-muted);
+}
+
+.gg-modal-product {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid var(--gg-line);
+}
+
+.gg-modal-product img {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: var(--gg-mint);
+}
+
+.gg-modal-product strong {
+  display: block;
+  font-size: 15px;
+  color: var(--gg-green-dark);
+}
+
+.gg-modal-product p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--gg-muted);
+}
+
+.gg-modal-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--gg-mint);
+}
+
+.gg-modal-price span {
+  font-size: 14px;
+  color: var(--gg-muted);
+}
+
+.gg-modal-price strong {
+  font-size: 22px;
+  color: var(--gg-green-dark);
+}
+
+.gg-modal-note {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin: 12px 0 18px;
+  font-size: 13px;
+  color: var(--gg-muted);
+}
+
+.gg-modal-note .gg-icon {
+  font-size: 20px;
+  color: var(--gg-leaf);
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width: 1200px) {
+  .gg-track { --gg-per-view: 4; }
+  .gg-gift-grid { grid-template-columns: 1fr 1fr; }
+  .gg-gift-card { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
+  .gg-gift-card h3 { grid-column: 1 / -1; }
+  .gg-checklist { border-bottom: 0; padding-bottom: 0; }
+  .gg-contribution { padding-top: 0; }
+}
+
+@media (max-width: 992px) {
+  .gg-track { --gg-per-view: 3; }
+  .gg-hero-media { inset: 0 0 0 20%; }
+  .gg-hero-tag { display: none; }
+  .gg-children-head { flex-direction: column; align-items: stretch; }
+  .gg-quote-box { max-width: none; }
+  .gg-choose { grid-template-columns: 34% 1fr; }
+  .gg-choose-side { display: none; }
+}
+
+@media (max-width: 768px) {
+  .gg-container { width: calc(100% - 40px); }
+
+  /* Hero: ảnh lên trên, chữ xuống dưới */
+  .gg-hero { flex-direction: column; align-items: stretch; min-height: 0; }
+  .gg-hero-media { position: relative; inset: auto; height: 300px; background-position: 70% center; }
+  .gg-hero-media::before { background: linear-gradient(0deg, var(--gg-cream) 0%, rgba(251, 252, 248, 0) 35%); }
+  .gg-hero-media::after { display: none; }
+  .gg-hero-inner { padding-block: 8px 36px; }
+  .gg-hero-note { top: 20px; right: 5%; font-size: 30px; }
+  .gg-hero-note .gg-icon { font-size: 26px; }
+  .gg-hero-lead { font-size: 17px; }
+  .gg-hero-lead br { display: none; }
+  .gg-hero-values { flex-direction: column; gap: 10px; }
+
+  .gg-gift-grid { grid-template-columns: 1fr; }
+  .gg-gift-visual, .gg-gift-visual img { min-height: 220px; }
+  .gg-gift-badge { width: 88px; height: 88px; font-size: 16px; }
+  .gg-gift-card { display: block; }
+  .gg-checklist { border-bottom: 1px solid var(--gg-line); padding-bottom: 16px; }
+  .gg-contribution { padding-top: 16px; }
+
+  .gg-children-lead br { display: none; }
+  .gg-toolbar { flex-direction: column; align-items: stretch; }
+  .gg-pills { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -20px; padding-inline: 20px; }
+  .gg-pills::-webkit-scrollbar { display: none; }
+  .gg-pill { flex: none; min-width: 0; }
+  .gg-sort select { width: 100%; }
+  .gg-track { --gg-per-view: 2.2; --gg-gap: 12px; margin-inline: -20px; padding-inline: 20px; scroll-padding-inline: 20px; }
+  .gg-carousel-btn { display: none; }
+
+  .gg-choose { display: block; }
+  .gg-choose-media { min-height: 200px; -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 35%); mask-image: linear-gradient(0deg, transparent 0%, #000 35%); }
+  .gg-choose-copy { padding: 8px 20px 40px; }
+  .gg-choose-copy .gg-text br { display: none; }
+  .gg-btn-lg { width: 100%; padding: 15px 18px; font-size: 15px; }
+
+  .gg-modal-child img { width: 96px; height: 96px; }
+}
+
+@media (max-width: 480px) {
+  .gg-track { --gg-per-view: 1.6; }
+  .gg-benefits { grid-template-columns: repeat(2, 1fr); }
+  .gg-hero-media { height: 240px; }
+}

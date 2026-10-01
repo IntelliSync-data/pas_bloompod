@@ -1,0 +1,40 @@
+name: Deploy to Shared Hosting
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Build assets
+      #   run: |
+      #     npm ci
+      #     npm run build
+
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.LANDING_PAGE_BLOOMPOD_HOST }}
+          username: ${{ secrets.LANDING_PAGE_BLOOMPOD_USER }}
+          password: ${{ secrets.LANDING_PAGE_BLOOMPOD_PASSWORD }}
+          protocol: ftps
+          port: 21
+          security: loose
+          server-dir: ${{ vars.LANDING_PAGE_PAS_BLOOMPOD_TARGET_DIR }}
+          local-dir: ./source-main/
+          timeout: 60000
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/claude/**
