@@ -730,15 +730,20 @@
 
 .gg-card-media {
   position: relative;
-  aspect-ratio: 1 / .92;
+  flex: none;
+  aspect-ratio: 1 / 1.1;
+  overflow: hidden;
   background: var(--gg-mint);
 }
 
 .gg-card-media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
 }
 
 .gg-age {
@@ -786,6 +791,10 @@
   font-size: 13.5px;
   line-height: 1.4;
   color: var(--gg-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .gg-card.is-gifted {
