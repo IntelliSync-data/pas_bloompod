@@ -78,8 +78,6 @@ const grid = document.querySelector('#gg-grid');
 const pills = document.querySelector('#gg-pills');
 const sortSelect = document.querySelector('#gg-sort');
 const statusText = document.querySelector('#gg-status');
-const prevBtn = document.querySelector('#gg-prev');
-const nextBtn = document.querySelector('#gg-next');
 const modal = document.querySelector('#gg-modal');
 const modalBody = document.querySelector('#gg-modal-body');
 const modalClose = document.querySelector('#gg-modal-close');
@@ -154,7 +152,6 @@ function makePill(label, categoryId, isActive) {
 async function loadChildren() {
     grid.innerHTML = '';
     statusText.textContent = 'Loading children…';
-    updateArrows();
     try {
         // include_hidden để bé đã được tặng vẫn trả về (kèm is_visible: false),
         // nhờ vậy mới hiện mờ ở cuối danh sách thay vì biến mất
@@ -200,22 +197,6 @@ function render() {
         </article>`;
     }).join('');
 
-    grid.scrollLeft = 0;
-    updateArrows();
-}
-
-// ==============================================
-// CAROUSEL
-// ==============================================
-
-function updateArrows() {
-    const max = grid.scrollWidth - grid.clientWidth;
-    prevBtn.hidden = grid.scrollLeft <= 4;
-    nextBtn.hidden = max <= 4 || grid.scrollLeft >= max - 4;
-}
-
-function slide(direction) {
-    grid.scrollBy({ left: direction * grid.clientWidth * 0.8, behavior: 'smooth' });
 }
 
 // ==============================================
@@ -297,10 +278,6 @@ grid.addEventListener('click', event => {
     if (button) openGift(children.find(c => String(c.id) === button.dataset.id));
 });
 
-grid.addEventListener('scroll', updateArrows, { passive: true });
-window.addEventListener('resize', updateArrows);
-prevBtn.addEventListener('click', () => slide(-1));
-nextBtn.addEventListener('click', () => slide(1));
 
 // "Let Us Choose" — để BloomPod chọn giúp một bé chưa được tặng
 document.querySelector('#gg-choose-btn').addEventListener('click', () => {
