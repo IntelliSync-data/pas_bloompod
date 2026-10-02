@@ -191,7 +191,7 @@ function render() {
                 <h3>${escapeHtml(child.name)}</h3>
                 <p>“${escapeHtml(child.description)}”</p>
                 ${gifted
-                    ? `<button class="gg-btn gg-btn-block" type="button" disabled>${ICON('sprout')}Already gifted</button>`
+                    ? `<button class="" type="button" disabled>${ICON('sprout')}Already gifted</button>`
                     : `<button class="gg-btn gg-btn-block" type="button" data-id="${escapeHtml(child.id)}">${ICON('gift')}Gift a Bloompod</button>`}
             </div>
         </article>`;
@@ -238,12 +238,6 @@ function openGift(child) {
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     modalClose.focus();
-
-    document.querySelector('#gg-gift-now').onclick = () => {
-        // Sang trang đặt hàng ở chế độ tặng quà: không hỏi địa chỉ và tuổi bé
-        const params = new URLSearchParams({ gift: child.id, child: child.name });
-        window.location.href = 'order-en.html?' + params.toString();
-    };
 }
 
 function closeGift() {
@@ -275,8 +269,15 @@ sortSelect.addEventListener('change', render);
 
 grid.addEventListener('click', event => {
     const button = event.target.closest('[data-id]');
-    if (button) openGift(children.find(c => String(c.id) === button.dataset.id));
+    if (!button) return;
+
+    const child = children.find(c => String(c.id) === button.dataset.id);
+    if (!child) return;
+
+    const params = new URLSearchParams({ gift: child.id, child: child.name });
+    window.location.href = 'https://bloompod.vn/order-en.html?' + params.toString();
 });
+
 
 
 // "Let Us Choose" — để BloomPod chọn giúp một bé chưa được tặng
