@@ -23,23 +23,17 @@
         <section>
             <!-- Header (lấy từ index.html) -->
             <header class="gg-header" id="gg-header">
-                <a class="gg-brand" href="#gg-top" aria-label="Bloompod home">
-                    <span class="gg-brand-mark">∞</span>
-                    <span>
-                        <strong>Bloompod</strong>
-                        <small>Little Ears. A Brighter Tomorrow.</small>
-                    </span>
-                </a>
-                <nav class="gg-nav" id="gg-nav" aria-label="Primary navigation">
+            <div onclick="window.location.href='./'" class="logo" role="img" aria-label="Bloompod logo"></div>
+                <!-- <nav class="gg-nav" id="gg-nav" aria-label="Primary navigation">
                     <a href="#gg-top">Home</a>
                     <a href="#gg-gift">About</a>
                     <a href="#gg-children">How It Works</a>
                     <a class="is-active" href="#gg-children" aria-current="page">Planting a Seed</a>
                     <a href="#gg-choose">Impact</a>
                     <a href="#gg-choose">Contact</a>
-                </nav>
+                </nav> -->
                 <div class="gg-header-actions">
-                    <button class="gg-language" type="button">EN <span aria-hidden="true">⌄</span></button>
+                    <!-- <button class="gg-language" type="button">EN <span aria-hidden="true">⌄</span></button> -->
                     <a class="gg-header-cta" href="#gg-children">Give a Gift</a>
                 </div>
                 <button class="gg-menu-toggle" id="gg-menu-toggle" type="button" aria-label="Open menu"
@@ -197,9 +191,9 @@
                   <h2 class="gg-title">Can’t Choose a Specific Child?</h2>
                   <p class="gg-text">Let us choose a child for you.<br>Your gift will be given to a child through our giving
                     program,<br>helping them take their first steps toward an English language foundation.</p>
-                  <button class="gg-btn gg-btn-lg" id="gg-choose-btn" type="button">
-                    <svg class="gg-icon"><use href="#i-gift" /></svg>Gift a Bloompod – Let Us Choose
-                  </button>
+                  <a class="gg-btn gg-btn-lg" id="gg-choose-btn" type="button" href="#gg-children">
+                    Gift a Bloompod – Let Us Choose
+                  </a>
                 </div>
                 <div class="gg-choose-side" aria-hidden="true">
                   <p class="gg-choose-note">Different<br>children.<br>A brighter<br>tomorrow. <svg class="gg-icon"><use href="#i-heart" /></svg></p>
@@ -215,12 +209,12 @@
     </main>
 
     <!-- Popup tặng quà -->
-    <div class="gg-modal" id="gg-modal" hidden>
+    <!-- <div class="gg-modal" id="gg-modal" hidden>
         <div class="gg-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="gg-modal-title">
             <button class="gg-modal-close" id="gg-modal-close" type="button" aria-label="Close">×</button>
             <div id="gg-modal-body"></div>
         </div>
-    </div>
+    </div> -->
 
     <script src="assets/js/give-a-gift.js?v=2"></script>
 </body>

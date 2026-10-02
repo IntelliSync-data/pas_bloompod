@@ -27,6 +27,17 @@
   display: none !important;
 }
 
+.logo {
+    width: 180px;
+    aspect-ratio: 504/104;
+    background-image: url(../images/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center left;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 .gg-sprite {
   position: absolute;
   width: 0;
@@ -341,7 +352,7 @@
 .gg-hero-media {
   position: absolute;
   inset: 0 0 0 30%;
-  background: url("../images/01_Hero_Planting_a_Seed.png") 62% center / cover no-repeat;
+  background: url("../images/pic_01.jpg") 62% center / cover no-repeat;
 }
 
 /* Làm mờ mép trái ảnh để chữ nổi trên nền sáng */
@@ -831,7 +842,7 @@
 .gg-choose-media {
   align-self: stretch;
   min-height: 290px;
-  background: url("../images/04_Let_Us_Choose.png") 38% center / cover no-repeat;
+  background: url("../images/pic_03.jpg") 38% center / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
   mask-image: linear-gradient(90deg, #000 62%, transparent 100%);
 }
@@ -1027,6 +1038,9 @@
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
+@media (max-width: 1800px) {
+  
+}
 @media (max-width: 1200px) {
   .gg-track { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .gg-gift-grid { grid-template-columns: 1fr 1fr; }

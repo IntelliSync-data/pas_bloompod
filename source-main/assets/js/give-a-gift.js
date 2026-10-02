@@ -280,22 +280,22 @@ grid.addEventListener('click', event => {
 
 
 // "Let Us Choose" — để BloomPod chọn giúp một bé chưa được tặng
-document.querySelector('#gg-choose-btn').addEventListener('click', () => {
-    const available = children.filter(c => !isGifted(c));
-    if (!available.length) {
-        document.querySelector('#gg-children').scrollIntoView({ behavior: 'smooth' });
-        return;
-    }
-    openGift(available[Math.floor(Math.random() * available.length)]);
-});
+// document.querySelector('#gg-choose-btn').addEventListener('click', () => {
+//     const available = children.filter(c => !isGifted(c));
+//     if (!available.length) {
+//         document.querySelector('#gg-children').scrollIntoView({ behavior: 'smooth' });
+//         return;
+//     }
+//     openGift(available[Math.floor(Math.random() * available.length)]);
+// });
 
-modalClose.addEventListener('click', closeGift);
-modal.addEventListener('click', event => {
-    if (event.target === modal) closeGift();
-});
-document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeGift();
-});
+// modalClose.addEventListener('click', closeGift);
+// modal.addEventListener('click', event => {
+//     if (event.target === modal) closeGift();
+// });
+// document.addEventListener('keydown', event => {
+//     if (event.key === 'Escape') closeGift();
+// });
 
 (async function init() {
     await Promise.all([loadCategories(), loadGiftPrice()]);
