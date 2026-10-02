@@ -275,7 +275,7 @@ grid.addEventListener('click', event => {
     if (!child) return;
 
     const params = new URLSearchParams({ gift: child.id, child: child.name });
-    window.location.href = 'https://bloompod.vn/order-en.html?' + params.toString();
+    window.location.href = 'https://website-demo.xn--hthng-171byc.vn/bloom/order-en.html?' + params.toString();
 });
 
 
