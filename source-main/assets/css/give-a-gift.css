@@ -120,6 +120,20 @@
   color: var(--gg-muted);
 }
 
+.gg-copyright{
+  grid-area: copyright;
+  text-align: right;
+  margin-right: 10px;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: var(--gg-muted);
+}
+
+.gg-copyright a{
+  color: var(--gg-green-dark);
+  text-decoration: underline;
+  font-weight: 600;
+}
 /* ----- Nút ----- */
 .gg-btn {
   display: inline-flex;
@@ -302,40 +316,12 @@
 
 @media (max-width: 1100px) {
   .gg-nav { gap: 14px; }
-  .gg-header-cta { display: none; }
 }
 
 @media (max-width: 760px) {
   .gg-header { height: 68px; padding: 0 5%; }
-  .gg-nav,
-  .gg-header-actions { display: none; }
-  .gg-menu-toggle { display: block; }
   .gg-brand strong { font-size: 20px; }
   .gg-page section { scroll-margin-top: 68px; }
-
-  /* Menu mobile mở ra bên dưới header */
-  .gg-header.is-open .gg-nav {
-    display: flex;
-    position: absolute;
-    top: 68px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 12px 5% 18px;
-    background: #fffef9;
-    box-shadow: 0 12px 20px rgba(20, 60, 35, .08);
-  }
-
-  .gg-header.is-open .gg-nav a { padding: 10px 0; }
-
-  .gg-header.is-open .gg-header-actions {
-    display: flex;
-    position: absolute;
-    top: 80px;
-    right: 5%;
-  }
 }
 
 /* =====================================================================
@@ -834,12 +820,17 @@
   position: relative;
   display: grid;
   grid-template-columns: 30% 1fr 22%;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "media copy side"
+    "media copyright copyright";
   align-items: center;
   min-height: 290px;
   background: linear-gradient(100deg, #f1f6e8 0%, #f6f9ef 50%, #eaf3de 100%);
 }
 
 .gg-choose-media {
+  grid-area: media;
   align-self: stretch;
   min-height: 290px;
   background: url("../images/pic_03.jpg") 38% center / cover no-repeat;
@@ -848,6 +839,7 @@
 }
 
 .gg-choose-copy {
+  grid-area: copy;
   position: relative;
   z-index: 2;
   padding: 40px 24px;
@@ -859,6 +851,7 @@
 }
 
 .gg-choose-side {
+  grid-area: side;
   position: relative;
   align-self: stretch;
   min-height: 290px;
@@ -1097,6 +1090,7 @@
   .gg-btn-lg { width: 100%; padding: 15px 18px; font-size: 15px; }
 
   .gg-modal-child img { width: 96px; height: 96px; }
+  .gg-copyright{ text-align: center; }
 }
 
 @media (max-width: 480px) {
