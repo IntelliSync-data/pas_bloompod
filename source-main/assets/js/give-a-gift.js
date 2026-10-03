@@ -46,6 +46,9 @@ const IS_PRODUCTION = window.location.hostname === 'bloompod.vn' ||
     window.location.hostname === 'www.bloompod.vn';
 const GIFT_PACKAGE_ID = IS_PRODUCTION ? 6 : 5;
 
+// Trang đặt hàng nằm ở site khác nên để nguyên đường dẫn tuyệt đối
+const ORDER_URL = 'https://website-demo.xn--hthng-171byc.vn/bloom/order-en.html';
+
 const GIFT = {
     name: 'Bloompod Audio Learning Kit',
     forAge: 'For children aged 0 – 3',
@@ -234,6 +237,11 @@ function openGift(child) {
 
         <button class="gg-btn gg-btn-lg gg-btn-block" id="gg-gift-now" type="button">${ICON('gift')}Gift this</button>`;
 
+    document.querySelector('#gg-gift-now').addEventListener('click', () => {
+        const params = new URLSearchParams({ gift: child.id, child: child.name });
+        window.location.href = ORDER_URL + '?' + params.toString();
+    });
+
     lastFocus = document.activeElement;
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
@@ -271,11 +279,7 @@ grid.addEventListener('click', event => {
     const button = event.target.closest('[data-id]');
     if (!button) return;
 
-    const child = children.find(c => String(c.id) === button.dataset.id);
-    if (!child) return;
-
-    const params = new URLSearchParams({ gift: child.id, child: child.name });
-    window.location.href = 'https://website-demo.xn--hthng-171byc.vn/bloom/order-en.html?' + params.toString();
+    openGift(children.find(c => String(c.id) === button.dataset.id));
 });
 
 
@@ -290,13 +294,13 @@ grid.addEventListener('click', event => {
 //     openGift(available[Math.floor(Math.random() * available.length)]);
 // });
 
-// modalClose.addEventListener('click', closeGift);
-// modal.addEventListener('click', event => {
-//     if (event.target === modal) closeGift();
-// });
-// document.addEventListener('keydown', event => {
-//     if (event.key === 'Escape') closeGift();
-// });
+modalClose.addEventListener('click', closeGift);
+modal.addEventListener('click', event => {
+    if (event.target === modal) closeGift();
+});
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeGift();
+});
 
 (async function init() {
     await Promise.all([loadCategories(), loadGiftPrice()]);
