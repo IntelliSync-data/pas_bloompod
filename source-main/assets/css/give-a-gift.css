@@ -28,16 +28,17 @@
 }
 
 .logo {
-    width: 180px;
-    aspect-ratio: 504/104;
-    background-image: url(../images/logo.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center left;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  width: 180px;
+  aspect-ratio: 504/104;
+  background-image: url(../images/logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center left;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
 .gg-sprite {
   position: absolute;
   width: 0;
@@ -89,7 +90,7 @@
   align-items: center;
   gap: 8px;
   margin: 0 0 10px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: .32em;
   color: var(--gg-green-dark);
@@ -120,7 +121,7 @@
   color: var(--gg-muted);
 }
 
-.gg-copyright{
+.gg-copyright {
   grid-area: copyright;
   text-align: right;
   margin-right: 10px;
@@ -129,11 +130,12 @@
   color: var(--gg-muted);
 }
 
-.gg-copyright a{
+.gg-copyright a {
   color: var(--gg-green-dark);
   text-decoration: underline;
   font-weight: 600;
 }
+
 /* ----- Nút ----- */
 .gg-btn {
   display: inline-flex;
@@ -315,13 +317,24 @@
 }
 
 @media (max-width: 1100px) {
-  .gg-nav { gap: 14px; }
+  .gg-nav {
+    gap: 14px;
+  }
 }
 
 @media (max-width: 760px) {
-  .gg-header { height: 68px; padding: 0 5%; }
-  .gg-brand strong { font-size: 20px; }
-  .gg-page section { scroll-margin-top: 68px; }
+  .gg-header {
+    height: 68px;
+    padding: 0 5%;
+  }
+
+  .gg-brand strong {
+    font-size: 20px;
+  }
+
+  .gg-page section {
+    scroll-margin-top: 68px;
+  }
 }
 
 /* =====================================================================
@@ -588,7 +601,7 @@
   padding-top: 18px;
 }
 
-.gg-contribution > .gg-icon {
+.gg-contribution>.gg-icon {
   font-size: 46px;
   color: var(--gg-leaf);
 }
@@ -638,7 +651,7 @@
   background: var(--gg-mint);
 }
 
-.gg-quote-box > .gg-icon {
+.gg-quote-box>.gg-icon {
   font-size: 36px;
   color: var(--gg-leaf);
 }
@@ -760,10 +773,21 @@
 }
 
 /* Màu nhãn tuổi xoay vòng theo nhóm tuổi */
-.gg-age-0 { background: #d9eefc; }
-.gg-age-1 { background: #fdf0c2; }
-.gg-age-2 { background: #fbdde4; }
-.gg-age-3 { background: #dff1d5; }
+.gg-age-0 {
+  background: #d9eefc;
+}
+
+.gg-age-1 {
+  background: #fdf0c2;
+}
+
+.gg-age-2 {
+  background: #fbdde4;
+}
+
+.gg-age-3 {
+  background: #dff1d5;
+}
 
 .gg-card-body {
   display: flex;
@@ -881,10 +905,35 @@
   opacity: .9;
 }
 
-.gg-leaf-1 { right: 4%; bottom: 18px; transform: rotate(-30deg); color: #5a9a3f; }
-.gg-leaf-2 { right: 22%; bottom: 46px; width: 52px; transform: rotate(-70deg) scaleX(-1); }
-.gg-leaf-3 { right: 0; bottom: 110px; width: 46px; transform: rotate(20deg); color: #8cc06a; }
-.gg-leaf-4 { right: 36%; bottom: 8px; width: 44px; transform: rotate(-120deg); color: #8cc06a; }
+.gg-leaf-1 {
+  right: 4%;
+  bottom: 18px;
+  transform: rotate(-30deg);
+  color: #5a9a3f;
+}
+
+.gg-leaf-2 {
+  right: 22%;
+  bottom: 46px;
+  width: 52px;
+  transform: rotate(-70deg) scaleX(-1);
+}
+
+.gg-leaf-3 {
+  right: 0;
+  bottom: 110px;
+  width: 46px;
+  transform: rotate(20deg);
+  color: #8cc06a;
+}
+
+.gg-leaf-4 {
+  right: 36%;
+  bottom: 8px;
+  width: 44px;
+  transform: rotate(-120deg);
+  color: #8cc06a;
+}
 
 /* =====================================================================
    POPUP TẶNG QUÀ
@@ -1031,70 +1080,230 @@
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
-@media (max-width: 1800px) {
-  
-}
+@media (max-width: 1800px) {}
+
 @media (max-width: 1200px) {
-  .gg-track { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .gg-gift-grid { grid-template-columns: 1fr 1fr; }
-  .gg-gift-card { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; }
-  .gg-gift-card h3 { grid-column: 1 / -1; }
-  .gg-checklist { border-bottom: 0; padding-bottom: 0; }
-  .gg-contribution { padding-top: 0; }
+  .gg-track {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .gg-gift-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .gg-gift-card {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+  }
+
+  .gg-gift-card h3 {
+    grid-column: 1 / -1;
+  }
+
+  .gg-checklist {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .gg-contribution {
+    padding-top: 0;
+  }
 }
 
 @media (max-width: 992px) {
-  .gg-track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .gg-hero-media { inset: 0 0 0 20%; }
-  .gg-hero-tag { display: none; }
-  .gg-children-head { flex-direction: column; align-items: stretch; }
-  .gg-quote-box { max-width: none; }
-  .gg-choose { grid-template-columns: 34% 1fr; }
-  .gg-choose-side { display: none; }
+  .gg-track {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .gg-hero-media {
+    inset: 0 0 0 20%;
+  }
+
+  .gg-hero-tag {
+    display: none;
+  }
+
+  .gg-children-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gg-quote-box {
+    max-width: none;
+  }
+
+  .gg-choose {
+    grid-template-columns: 34% 1fr;
+  }
+
+  .gg-choose-side {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
-  .gg-container { width: calc(100% - 40px); }
+  .gg-container {
+    width: calc(100% - 40px);
+  }
 
   /* Hero: ảnh lên trên, chữ xuống dưới */
-  .gg-hero { flex-direction: column; align-items: stretch; min-height: 0; }
-  .gg-hero-media { position: relative; inset: auto; height: 300px; background-position: 70% center; }
-  .gg-hero-media::before { background: linear-gradient(0deg, var(--gg-cream) 0%, rgba(251, 252, 248, 0) 35%); }
-  .gg-hero-media::after { display: none; }
-  .gg-hero-inner { padding-block: 8px 36px; }
-  .gg-hero-note { top: 20px; right: 5%; font-size: 30px; }
-  .gg-hero-note .gg-icon { font-size: 26px; }
-  .gg-hero-lead { font-size: 17px; }
-  .gg-hero-lead br { display: none; }
-  .gg-hero-values { flex-direction: column; gap: 10px; }
+  .gg-hero {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
 
-  .gg-gift-grid { grid-template-columns: 1fr; }
-  .gg-gift-visual, .gg-gift-visual img { min-height: 220px; }
-  .gg-gift-badge { width: 88px; height: 88px; font-size: 16px; }
-  .gg-gift-card { display: block; }
-  .gg-checklist { border-bottom: 1px solid var(--gg-line); padding-bottom: 16px; }
-  .gg-contribution { padding-top: 16px; }
+  .gg-hero-media {
+    position: relative;
+    inset: auto;
+    height: 300px;
+    background-position: 70% center;
+  }
 
-  .gg-children-lead br { display: none; }
-  .gg-toolbar { flex-direction: column; align-items: stretch; }
-  .gg-pills { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -20px; padding-inline: 20px; }
-  .gg-pills::-webkit-scrollbar { display: none; }
-  .gg-pill { flex: none; min-width: 0; }
-  .gg-sort select { width: 100%; }
-  .gg-track { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .gg-hero-media::before {
+    background: linear-gradient(0deg, var(--gg-cream) 0%, rgba(251, 252, 248, 0) 35%);
+  }
 
-  .gg-choose { display: block; }
-  .gg-choose-media { min-height: 200px; -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 35%); mask-image: linear-gradient(0deg, transparent 0%, #000 35%); }
-  .gg-choose-copy { padding: 8px 20px 40px; }
-  .gg-choose-copy .gg-text br { display: none; }
-  .gg-btn-lg { width: 100%; padding: 15px 18px; font-size: 15px; }
+  .gg-hero-media::after {
+    display: none;
+  }
 
-  .gg-modal-child img { width: 96px; height: 96px; }
-  .gg-copyright{ text-align: center; }
+  .gg-hero-inner {
+    padding-block: 8px 36px;
+  }
+
+  .gg-hero-note {
+    top: 20px;
+    right: 5%;
+    font-size: 30px;
+  }
+
+  .gg-hero-note .gg-icon {
+    font-size: 26px;
+  }
+
+  .gg-hero-lead {
+    font-size: 17px;
+  }
+
+  .gg-hero-lead br {
+    display: none;
+  }
+
+  .gg-hero-values {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .gg-gift-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gg-gift-visual,
+  .gg-gift-visual img {
+    min-height: 220px;
+  }
+
+  .gg-gift-badge {
+    width: 88px;
+    height: 88px;
+    font-size: 16px;
+  }
+
+  .gg-gift-card {
+    display: block;
+  }
+
+  .gg-checklist {
+    border-bottom: 1px solid var(--gg-line);
+    padding-bottom: 16px;
+  }
+
+  .gg-contribution {
+    padding-top: 16px;
+  }
+
+  .gg-children-lead br {
+    display: none;
+  }
+
+  .gg-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gg-pills {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: -20px;
+    padding-inline: 20px;
+  }
+
+  .gg-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gg-pill {
+    flex: none;
+    min-width: 0;
+  }
+
+  .gg-sort select {
+    width: 100%;
+  }
+
+  .gg-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .gg-choose {
+    display: block;
+  }
+
+  .gg-choose-media {
+    min-height: 200px;
+    -webkit-mask-image: linear-gradient(0deg, transparent 0%, #000 35%);
+    mask-image: linear-gradient(0deg, transparent 0%, #000 35%);
+  }
+
+  .gg-choose-copy {
+    padding: 8px 20px 40px;
+  }
+
+  .gg-choose-copy .gg-text br {
+    display: none;
+  }
+
+  .gg-btn-lg {
+    width: 100%;
+    padding: 15px 18px;
+    font-size: 15px;
+  }
+
+  .gg-modal-child img {
+    width: 96px;
+    height: 96px;
+  }
+
+  .gg-copyright {
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
-  .gg-track { gap: 10px; }
-  .gg-benefits { grid-template-columns: repeat(2, 1fr); }
-  .gg-hero-media { height: 240px; }
+  .gg-track {
+    gap: 10px;
+  }
+
+  .gg-benefits {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gg-hero-media {
+    height: 240px;
+  }
 }

@@ -59,7 +59,18 @@ const GIFT = {
 
 const ICON = name => `<svg class="gg-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
 
-const money = n => new Intl.NumberFormat('vi-VN').format(n) + ' VND';
+// Tỉ giá chỉ để hiện giá tham khảo bằng USD. Phải khớp với "Exchange Rate"
+// trong Settings của isd_profile_management (mặc định 25.000). API package-info
+// chưa trả tỉ giá nên tạm để ở đây.
+const USD_RATE = 25000;
+
+const nf = new Intl.NumberFormat('en-US');
+
+const money = n => {
+    const vnd = nf.format(n) + ' VND';
+    const usd = Math.round(Number(n) / USD_RATE);
+    return usd > 0 ? `${vnd} ~ $${nf.format(usd)}` : vnd;
+};
 
 /** URL ảnh từ API là đường dẫn tương đối, phải ghép thêm host */
 const resolveUrl = path => {
@@ -79,7 +90,6 @@ let activeCategoryId = null;   // null = All Children
 
 const grid = document.querySelector('#gg-grid');
 const pills = document.querySelector('#gg-pills');
-const sortSelect = document.querySelector('#gg-sort');
 const statusText = document.querySelector('#gg-status');
 const modal = document.querySelector('#gg-modal');
 const modalBody = document.querySelector('#gg-modal-body');
@@ -171,15 +181,9 @@ async function loadChildren() {
 }
 
 function render() {
+    // Giữ nguyên thứ tự API trả về (sort_order bên Odoo), chỉ đẩy bé đã được
+    // tặng xuống cuối danh sách
     const list = children.slice();
-    const sort = sortSelect.value;
-
-    // API không trả tuổi dạng số, dùng id nhóm tuổi làm thứ tự
-    if (sort === 'youngest') list.sort((a, b) => ageOrder(a) - ageOrder(b));
-    else if (sort === 'oldest') list.sort((a, b) => ageOrder(b) - ageOrder(a));
-    else if (sort === 'name') list.sort((a, b) => String(a.name).localeCompare(String(b.name), 'vi'));
-
-    // Bé đã được tặng luôn nằm cuối, bất kể đang sắp xếp kiểu nào
     list.sort((a, b) => Number(isGifted(a)) - Number(isGifted(b)));
 
     grid.innerHTML = list.map(child => {
@@ -208,19 +212,10 @@ function render() {
 
 let lastFocus = null;
 
-function openGift(child) {
-    if (!child) return;
-
+/** Phần dưới của popup giống nhau ở cả hai kiểu tặng, chỉ khác khối giới thiệu bé */
+function showGiftModal(childBlock, onConfirm) {
     modalBody.innerHTML = `
-        <div class="gg-modal-child">
-            <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
-            <div>
-                <p class="gg-eyebrow">YOU ARE GIFTING</p>
-                <h3 id="gg-modal-title">${escapeHtml(child.name)}</h3>
-                <span class="gg-age gg-age-${ageTone(child)}">${escapeHtml(ageLabel(child))}</span>
-                <p class="gg-modal-quote">“${escapeHtml(child.description)}”</p>
-            </div>
-        </div>
+        ${childBlock}
 
         <div class="gg-modal-product">
             <img src="${GIFT.image}" alt="${escapeHtml(GIFT.name)}">
@@ -237,15 +232,59 @@ function openGift(child) {
 
         <button class="gg-btn gg-btn-lg gg-btn-block" id="gg-gift-now" type="button">${ICON('gift')}Gift this</button>`;
 
-    document.querySelector('#gg-gift-now').addEventListener('click', () => {
-        const params = new URLSearchParams({ gift: child.id, child: child.name });
-        window.location.href = ORDER_URL + '?' + params.toString();
-    });
+    document.querySelector('#gg-gift-now').addEventListener('click', onConfirm);
 
     lastFocus = document.activeElement;
     modal.hidden = false;
     document.body.style.overflow = 'hidden';
     modalClose.focus();
+}
+
+function goToOrder(child) {
+    const params = new URLSearchParams({ gift: child.id, child: child.name });
+    window.location.href = ORDER_URL + '?' + params.toString();
+}
+
+/** Tặng cho đúng một bé: popup hiện ảnh, tên, nhóm tuổi và câu trích của bé đó */
+function openGift(child) {
+    if (!child) return;
+
+    showGiftModal(`
+        <div class="gg-modal-child">
+            <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
+            <div>
+                <p class="gg-eyebrow">YOU ARE GIFTING</p>
+                <h3 id="gg-modal-title">${escapeHtml(child.name)}</h3>
+                <span class="gg-age gg-age-${ageTone(child)}">${escapeHtml(ageLabel(child))}</span>
+                <p class="gg-modal-quote">“${escapeHtml(child.description)}”</p>
+            </div>
+        </div>`, () => goToOrder(child));
+}
+
+/**
+ * "Let Us Choose": popup không nêu bé nào. Bấm "Gift this" mới lấy bé đầu tiên
+ * chưa được tặng - cũng chính là bé đầu tiên đang hiện trên trang, vì danh sách
+ * giữ nguyên thứ tự API và bé đã được tặng bị đẩy xuống cuối.
+ */
+function openGiftAnyChild() {
+    showGiftModal(`
+        <div class="gg-modal-child">
+            <div>
+                <p class="gg-eyebrow">YOU ARE GIFTING</p>
+                <h3 id="gg-modal-title">A child chosen by Bloompod</h3>
+                <p class="gg-modal-quote">Your gift goes to the next child on our list who is still
+                    waiting for one.</p>
+            </div>
+        </div>`, event => {
+        const child = children.find(c => !isGifted(c));
+        if (!child) {
+            const button = event.currentTarget;
+            button.disabled = true;
+            button.textContent = 'No child is waiting right now';
+            return;
+        }
+        goToOrder(child);
+    });
 }
 
 function closeGift() {
@@ -273,8 +312,6 @@ pills.addEventListener('click', event => {
     loadChildren();
 });
 
-sortSelect.addEventListener('change', render);
-
 grid.addEventListener('click', event => {
     const button = event.target.closest('[data-id]');
     if (!button) return;
@@ -284,15 +321,12 @@ grid.addEventListener('click', event => {
 
 
 
-// "Let Us Choose" — để BloomPod chọn giúp một bé chưa được tặng
-// document.querySelector('#gg-choose-btn').addEventListener('click', () => {
-//     const available = children.filter(c => !isGifted(c));
-//     if (!available.length) {
-//         document.querySelector('#gg-children').scrollIntoView({ behavior: 'smooth' });
-//         return;
-//     }
-//     openGift(available[Math.floor(Math.random() * available.length)]);
-// });
+// "Let Us Choose" — popup không nêu tên bé, chọn bé lúc bấm Gift this
+document.querySelector('#gg-choose-btn').addEventListener('click', event => {
+    // Thẻ <a href="#gg-children">, không chặn thì vừa mở popup vừa cuộn trang
+    event.preventDefault();
+    openGiftAnyChild();
+});
 
 modalClose.addEventListener('click', closeGift);
 modal.addEventListener('click', event => {
