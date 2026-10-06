@@ -128,6 +128,7 @@
   margin-bottom: 12px;
   font-size: 15px;
   color: var(--gg-muted);
+  white-space: nowrap;
 }
 
 .gg-copyright a {
@@ -210,6 +211,15 @@
   outline-offset: 2px;
 }
 
+.gg-contact {
+  grid-area: contact;
+  text-align: left;
+  margin-left: 10px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  color: var(--gg-muted);
+  font-weight: bolder;
+}
 /* =====================================================================
    HEADER (lấy từ index.html / styles.css)
    ===================================================================== */
@@ -278,9 +288,24 @@
   border-color: #166b43;
 }
 
+.gg-sentence {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 clamp(12px, 2vw, 32px);
+  font-family: var(--gg-hand);
+  font-weight: 400;
+  -webkit-text-stroke: .35px currentColor;
+  font-size: clamp(17px, 1.7vw, 23px);
+  line-height: 1.15;
+  text-align: center;
+  text-wrap: balance;
+  color: var(--gg-green-dark);
+}
+
 .gg-header-actions {
   display: flex;
   align-items: center;
+  flex: none;
   gap: 12px;
 }
 
@@ -300,6 +325,7 @@
   border-radius: 999px;
   padding: 13px 23px;
   font-weight: 700;
+  white-space: nowrap;
   box-shadow: 0 8px 18px rgba(22, 107, 67, .16);
 }
 
@@ -324,8 +350,17 @@
 
 @media (max-width: 760px) {
   .gg-header {
-    height: 68px;
-    padding: 0 5%;
+    height: auto;
+    min-height: 68px;
+    padding: 6px 5%;
+    flex-wrap: wrap;
+  }
+
+  .gg-sentence {
+    order: 3;
+    flex: 0 0 100%;
+    padding: 0 0 4px;
+    font-size: 15px;
   }
 
   .gg-brand strong {
@@ -333,7 +368,7 @@
   }
 
   .gg-page section {
-    scroll-margin-top: 68px;
+    scroll-margin-top: 112px;
   }
 }
 
@@ -847,7 +882,7 @@
   grid-template-rows: auto auto;
   grid-template-areas:
     "media copy side"
-    "media copyright copyright";
+    "media contact copyright";
   align-items: center;
   min-height: 290px;
   background: linear-gradient(100deg, #f1f6e8 0%, #f6f9ef 50%, #eaf3de 100%);
@@ -1077,6 +1112,9 @@
   color: var(--gg-leaf);
 }
 
+.gg-contact br{
+  display: none;
+}
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
@@ -1136,11 +1174,16 @@
 
   .gg-choose {
     grid-template-columns: 34% 1fr;
+    grid-template-areas: 
+      "media copy copy"
+      "media contact copyright";
   }
-
   .gg-choose-side {
     display: none;
   }
+  .gg-contact br{
+    display:block;
+}
 }
 
 @media (max-width: 768px) {
@@ -1261,7 +1304,7 @@
   }
 
   .gg-choose {
-    display: block;
+    display: inline;
   }
 
   .gg-choose-media {
@@ -1289,11 +1332,18 @@
     height: 96px;
   }
 
-  .gg-copyright {
+  .gg-copyright, 
+  .gg-contact {
     text-align: center;
+    margin-inline: 0;
+    padding-inline: 20px;
+    white-space: normal;
+  }
+
+  .gg-contact a{
+    white-space: nowrap;
   }
 }
-
 @media (max-width: 480px) {
   .gg-track {
     gap: 10px;
