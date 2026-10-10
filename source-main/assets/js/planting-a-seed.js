@@ -1,17 +1,61 @@
 /**
- * Planting a Seed — danh sách bé và popup tặng quà.
+ * Planting a Seed — menu, danh sách bé, bộ lọc và popup tặng quà.
  *
- * Dữ liệu lấy từ API sản phẩm: mỗi "product" là một bé,
- * `description` là câu trích, `categories[0]` là nhóm tuổi.
+ * Dữ liệu lấy từ API sản phẩm: mỗi "product" là một bé, `description` là câu
+ * trích, `categories[0]` là nhóm tuổi. Bấm tặng thì mở popup, xác nhận xong
+ * mới sang trang đặt hàng bên site Bloompod.
+ *
+ * Các class trong trang vẫn mang tiền tố gg- (give a gift) từ bản dựng đầu,
+ * đổi hết thì phải sửa cả HTML lẫn CSS nên giữ nguyên.
  */
 
+// ==============================================
+// HEADER: MENU MOBILE + CUỘN MƯỢT
+// ==============================================
+(function () {
+    const header = document.getElementById('gg-header');
+    const toggle = document.getElementById('gg-menu-toggle');
+
+    const setMenu = open => {
+        header.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        toggle.textContent = open ? '×' : '☰';
+    };
+
+    toggle.addEventListener('click', () => setMenu(!header.classList.contains('is-open')));
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', event => {
+            const href = anchor.getAttribute('href');
+            if (href === '#' || !href) return;
+            const target = document.querySelector(href);
+            if (!target) return;
+            event.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setMenu(false);
+        });
+    });
+})();
+
+// ==============================================
+// DỮ LIỆU
+// ==============================================
 const API_BASE = 'https://app.bloompod.vn';
 
+// Production là mọi tên miền bloompod.vn - trang này chạy ở
+// plantaseed.bloompod.vn, nên so bằng === 'bloompod.vn' là không bao giờ khớp
+// và production sẽ lỡ dùng gói demo. Bản demo nằm ở tên miền khác hẳn.
+const IS_PRODUCTION = /(^|\.)bloompod\.vn$/i.test(window.location.hostname);
+
 // Gói dành cho đơn tặng quà. Giá lấy từ API, phần còn lại cố định.
-// Phải khớp với gift_package_id trong order.js.
-const IS_PRODUCTION = window.location.hostname === 'bloompod.vn' ||
-    window.location.hostname === 'www.bloompod.vn';
+// Phải khớp với gift_package_id trong order.js bên site Bloompod.
 const GIFT_PACKAGE_ID = IS_PRODUCTION ? 6 : 5;
+
+// Trang đặt hàng nằm ở site Bloompod nên phải để đường dẫn tuyệt đối
+const ORDER_URL = IS_PRODUCTION
+    ? 'https://bloompod.vn/order-en.html'
+    : 'https://website-demo.xn--hthng-171byc.vn/bloom/order-en.html';
 
 const GIFT = {
     name: 'Bloompod Audio Learning Kit',
@@ -20,6 +64,51 @@ const GIFT = {
     price: null,
     image: 'assets/images/bloompod_sp.png'
 };
+
+const ICON = name => `<svg class="gg-icon" aria-hidden="true"><use href="#i-${name}"></use></svg>`;
+
+// Tỉ giá chỉ để hiện giá tham khảo bằng USD. Phải khớp với "Exchange Rate"
+// trong Settings của isd_profile_management (mặc định 25.000). API package-info
+// chưa trả tỉ giá nên tạm để ở đây.
+const USD_RATE = 25510;
+
+const nf = new Intl.NumberFormat('en-US');
+
+const money = n => {
+    const vnd = nf.format(n) + ' VND';
+    const usd = Math.round(Number(n) / USD_RATE);
+    return usd > 0 ? `${vnd} ~ $${nf.format(usd)}` : vnd;
+};
+
+/** URL ảnh từ API là đường dẫn tương đối, phải ghép thêm host */
+const resolveUrl = path => {
+    if (!path) return '';
+    return /^https?:\/\//i.test(path) ? path : API_BASE + path;
+};
+
+const escapeHtml = value => String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+let categories = [];
+let children = [];
+let activeCategoryId = null;   // null = All Children
+
+const grid = document.querySelector('#gg-grid');
+const pills = document.querySelector('#gg-pills');
+const statusText = document.querySelector('#gg-status');
+const modal = document.querySelector('#gg-modal');
+const modalBody = document.querySelector('#gg-modal-body');
+const modalClose = document.querySelector('#gg-modal-close');
+
+async function api(path) {
+    const response = await fetch(API_BASE + path);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    const body = await response.json();
+    return body.data || [];
+}
 
 /** Lấy giá gói tặng quà (total_cost) từ package-info */
 async function loadGiftPrice() {
@@ -37,36 +126,6 @@ async function loadGiftPrice() {
     }
 }
 
-const money = n => new Intl.NumberFormat('vi-VN').format(n) + ' VND';
-
-/** URL ảnh từ API là đường dẫn tương đối, phải ghép thêm host */
-const resolveUrl = path => {
-    if (!path) return '';
-    return /^https?:\/\//i.test(path) ? path : API_BASE + path;
-};
-
-const escapeHtml = value => String(value == null ? '' : value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-
-let children = [];
-let activeCategoryId = null;   // null = All Children
-
-const grid = document.querySelector('#grid');
-const pills = document.querySelector('.pills');
-const sortSelect = document.querySelector('#sort');
-const backdrop = document.querySelector('#backdrop');
-const modal = document.querySelector('#modal');
-
-async function api(path) {
-    const response = await fetch(API_BASE + path);
-    if (!response.ok) throw new Error('HTTP ' + response.status);
-    const body = await response.json();
-    return body.data || [];
-}
-
 /** Bé đã được tặng thì API trả is_visible = false */
 const isGifted = child => child.is_visible === false;
 
@@ -74,16 +133,23 @@ const firstCategory = child => (child.categories || [])[0] || null;
 const ageLabel = child => (firstCategory(child) || {}).name || '';
 const ageOrder = child => (firstCategory(child) || {}).id || 0;
 
+/** Màu nhãn tuổi: xoay vòng 4 màu theo vị trí nhóm tuổi trong danh sách */
+const ageTone = child => {
+    const category = firstCategory(child);
+    const index = category ? categories.findIndex(c => c.id === category.id) : -1;
+    return index < 0 ? 0 : index % 4;
+};
+
 // ==============================================
-// DANH SÁCH
+// BỘ LỌC + DANH SÁCH
 // ==============================================
 
 async function loadCategories() {
-    let categories = [];
     try {
         categories = await api('/api/v1/products/categories');
     } catch (error) {
         console.error('Error loading categories:', error);
+        categories = [];
     }
 
     // "All Children" cố định, các nhóm tuổi phía sau lấy từ API
@@ -96,100 +162,144 @@ async function loadCategories() {
 
 function makePill(label, categoryId, isActive) {
     const button = document.createElement('button');
-    button.className = isActive ? 'filter active' : 'filter';
+    button.type = 'button';
+    button.className = isActive ? 'gg-pill is-active' : 'gg-pill';
     button.textContent = label;
     button.dataset.categoryId = categoryId;
+    button.setAttribute('aria-pressed', String(isActive));
     return button;
 }
 
 async function loadChildren() {
     grid.innerHTML = '';
+    statusText.textContent = 'Loading children…';
     try {
         // include_hidden để bé đã được tặng vẫn trả về (kèm is_visible: false),
         // nhờ vậy mới hiện mờ ở cuối danh sách thay vì biến mất
         const params = new URLSearchParams({ include_hidden: '1' });
         if (activeCategoryId) params.set('categoryId', activeCategoryId);
         children = await api('/api/v1/products?' + params.toString());
+        statusText.textContent = children.length ? '' : 'No children in this group right now.';
     } catch (error) {
         console.error('Error loading children:', error);
         children = [];
+        statusText.textContent = 'We couldn’t load the children right now. Please try again later.';
     }
     render();
 }
 
 function render() {
+    // Giữ nguyên thứ tự API trả về (sort_order bên Odoo), chỉ đẩy bé đã được
+    // tặng xuống cuối danh sách
     const list = children.slice();
-    const sort = sortSelect.value;
-
-    // API không trả tuổi dạng số, dùng id nhóm tuổi làm thứ tự
-    if (sort === 'youngest') list.sort((a, b) => ageOrder(a) - ageOrder(b));
-    else if (sort === 'oldest') list.sort((a, b) => ageOrder(b) - ageOrder(a));
-    else if (sort === 'name') list.sort((a, b) => String(a.name).localeCompare(String(b.name), 'vi'));
-
-    // Bé đã được tặng luôn nằm cuối, bất kể đang sắp xếp kiểu nào
     list.sort((a, b) => Number(isGifted(a)) - Number(isGifted(b)));
 
     grid.innerHTML = list.map(child => {
         const gifted = isGifted(child);
         return `
-        <article class="card${gifted ? ' is-gifted' : ''}">
-            <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
-            <div class="card-info">
-                <span class="age">${escapeHtml(ageLabel(child))}</span>
+        <article class="gg-card${gifted ? ' is-gifted' : ''}">
+            <div class="gg-card-media">
+                <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}" loading="lazy">
+                <span class="gg-age gg-age-${ageTone(child)}">${escapeHtml(ageLabel(child))}</span>
+            </div>
+            <div class="gg-card-body">
                 <h3>${escapeHtml(child.name)}</h3>
                 <p>“${escapeHtml(child.description)}”</p>
                 ${gifted
-                    ? '<button class="gift" disabled>🌱 Already gifted</button>'
-                    : `<button class="gift" data-id="${escapeHtml(child.id)}">🎁 Gift BloomPod</button>`}
+                    ? `<button class="" type="button" disabled>${ICON('sprout')}Already gifted</button>`
+                    : `<button class="gg-btn gg-btn-block" type="button" data-id="${escapeHtml(child.id)}">${ICON('gift')}Gift a Bloompod</button>`}
             </div>
         </article>`;
     }).join('');
+
 }
 
 // ==============================================
 // POPUP TẶNG QUÀ
 // ==============================================
 
+let lastFocus = null;
+
+/** Phần dưới của popup giống nhau ở cả hai kiểu tặng, chỉ khác khối giới thiệu bé */
+function showGiftModal(childBlock, onConfirm) {
+    modalBody.innerHTML = `
+        ${childBlock}
+
+        <div class="gg-modal-product">
+            <img src="${GIFT.image}" alt="${escapeHtml(GIFT.name)}">
+            <div>
+                <strong>${escapeHtml(GIFT.name)}</strong>
+                <p>${escapeHtml(GIFT.forAge)}</p>
+                <p>${escapeHtml(GIFT.quantity)}</p>
+            </div>
+        </div>
+
+        ${GIFT.price ? `<div class="gg-modal-price"><span>Gift price</span><strong>${money(GIFT.price)}</strong></div>` : ''}
+
+        <p class="gg-modal-note">${ICON('sprout')}Bloompod contributes 36% of the product value toward every gift.</p>
+
+        <button class="gg-btn gg-btn-lg gg-btn-block" id="gg-gift-now" type="button">${ICON('gift')}Gift this</button>`;
+
+    document.querySelector('#gg-gift-now').addEventListener('click', onConfirm);
+
+    lastFocus = document.activeElement;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    modalClose.focus();
+}
+
+function goToOrder(child) {
+    const params = new URLSearchParams({ gift: child.id, child: child.name });
+    window.location.href = ORDER_URL + '?' + params.toString();
+}
+
+/** Tặng cho đúng một bé: popup hiện ảnh, tên, nhóm tuổi và câu trích của bé đó */
 function openGift(child) {
     if (!child) return;
 
-    modal.innerHTML = `
-        <div class="gift-child">
+    showGiftModal(`
+        <div class="gg-modal-child">
             <img src="${escapeHtml(resolveUrl(child.url))}" alt="${escapeHtml(child.name)}">
-            <div class="gift-child-text">
-                <h3>${escapeHtml(child.name)}</h3>
-                <p class="gift-age">${escapeHtml(ageLabel(child))}</p>
-                <div class="gift-sprout">🌱</div>
-                <p class="gift-quote">“${escapeHtml(child.description)}”</p>
+            <div>
+                <p class="gg-eyebrow">YOU ARE GIFTING</p>
+                <h3 id="gg-modal-title">${escapeHtml(child.name)}</h3>
+                <span class="gg-age gg-age-${ageTone(child)}">${escapeHtml(ageLabel(child))}</span>
+                <p class="gg-modal-quote">“${escapeHtml(child.description)}”</p>
             </div>
-        </div>
+        </div>`, () => goToOrder(child));
+}
 
-        <div class="gift-product">
-            <h4>The gift</h4>
-            <div class="gift-product-row">
-                <img src="${GIFT.image}" alt="${escapeHtml(GIFT.name)}">
-                <div>
-                    <strong>${escapeHtml(GIFT.name)}</strong>
-                    <p>${escapeHtml(GIFT.forAge)}</p>
-                    <p>${escapeHtml(GIFT.quantity)}</p>
-                    <p class="gift-price">${GIFT.price ? 'Gift price: ' + money(GIFT.price) : ''}</p>
-                </div>
+/**
+ * "Let Us Choose": popup không nêu bé nào. Bấm "Gift this" mới lấy bé đầu tiên
+ * chưa được tặng - cũng chính là bé đầu tiên đang hiện trên trang, vì danh sách
+ * giữ nguyên thứ tự API và bé đã được tặng bị đẩy xuống cuối.
+ */
+function openGiftAnyChild() {
+    showGiftModal(`
+        <div class="gg-modal-child">
+            <div>
+                <p class="gg-eyebrow">YOU ARE GIFTING</p>
+                <h3 id="gg-modal-title">A child chosen by Bloompod</h3>
+                <p class="gg-modal-quote">Your gift goes to the next child on our list who is still
+                    waiting for one.</p>
             </div>
-        </div>
-
-        <button class="primary gift-cta" id="giftNow">Gift this</button>`;
-
-    backdrop.classList.add('open');
-
-    document.querySelector('#giftNow').onclick = () => {
-        // Sang trang đặt hàng ở chế độ tặng quà: không hỏi địa chỉ và tuổi bé
-        const params = new URLSearchParams({ gift: child.id, child: child.name });
-        window.location.href = 'order-en.html?' + params.toString();
-    };
+        </div>`, event => {
+        const child = children.find(c => !isGifted(c));
+        if (!child) {
+            const button = event.currentTarget;
+            button.disabled = true;
+            button.textContent = 'No child is waiting right now';
+            return;
+        }
+        goToOrder(child);
+    });
 }
 
 function closeGift() {
-    backdrop.classList.remove('open');
+    if (modal.hidden) return;
+    modal.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
 }
 
 // ==============================================
@@ -197,33 +307,42 @@ function closeGift() {
 // ==============================================
 
 pills.addEventListener('click', event => {
-    const button = event.target.closest('.filter');
+    const button = event.target.closest('.gg-pill');
     if (!button) return;
 
-    pills.querySelectorAll('.filter').forEach(x => x.classList.remove('active'));
-    button.classList.add('active');
+    pills.querySelectorAll('.gg-pill').forEach(x => {
+        x.classList.remove('is-active');
+        x.setAttribute('aria-pressed', 'false');
+    });
+    button.classList.add('is-active');
+    button.setAttribute('aria-pressed', 'true');
     activeCategoryId = button.dataset.categoryId || null;
     loadChildren();
 });
 
-sortSelect.onchange = render;
-
-grid.onclick = event => {
+grid.addEventListener('click', event => {
     const button = event.target.closest('[data-id]');
-    if (button) openGift(children.find(c => String(c.id) === button.dataset.id));
-};
+    if (!button) return;
 
-// "Sponsor a Child" — để BloomPod chọn giúp một bé bất kỳ
-document.querySelector('#choose').onclick = () => {
-    const available = children.filter(c => !isGifted(c));
-    if (!available.length) return;
-    openGift(available[Math.floor(Math.random() * available.length)]);
-};
+    openGift(children.find(c => String(c.id) === button.dataset.id));
+});
 
-document.querySelector('#close').onclick = closeGift;
-backdrop.onclick = event => {
-    if (event.target === backdrop) closeGift();
-};
+
+
+// "Let Us Choose" — popup không nêu tên bé, chọn bé lúc bấm Gift this
+document.querySelector('#gg-choose-btn').addEventListener('click', event => {
+    // Thẻ <a href="#gg-children">, không chặn thì vừa mở popup vừa cuộn trang
+    event.preventDefault();
+    openGiftAnyChild();
+});
+
+modalClose.addEventListener('click', closeGift);
+modal.addEventListener('click', event => {
+    if (event.target === modal) closeGift();
+});
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeGift();
+});
 
 (async function init() {
     await Promise.all([loadCategories(), loadGiftPrice()]);
