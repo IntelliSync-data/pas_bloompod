@@ -62,7 +62,7 @@ const ICON = name => `<svg class="gg-icon" aria-hidden="true"><use href="#i-${na
 // Tỉ giá chỉ để hiện giá tham khảo bằng USD. Phải khớp với "Exchange Rate"
 // trong Settings của isd_profile_management (mặc định 25.000). API package-info
 // chưa trả tỉ giá nên tạm để ở đây.
-const USD_RATE = 25000;
+const USD_RATE = 25510;
 
 const nf = new Intl.NumberFormat('en-US');
 
@@ -228,7 +228,7 @@ function showGiftModal(childBlock, onConfirm) {
 
         ${GIFT.price ? `<div class="gg-modal-price"><span>Gift price</span><strong>${money(GIFT.price)}</strong></div>` : ''}
 
-        <p class="gg-modal-note">${ICON('sprout')}Bloompod contributes 30% of the product value toward every gift.</p>
+        <p class="gg-modal-note">${ICON('sprout')}Bloompod contributes 36% of the product value toward every gift.</p>
 
         <button class="gg-btn gg-btn-lg gg-btn-block" id="gg-gift-now" type="button">${ICON('gift')}Gift this</button>`;
 
