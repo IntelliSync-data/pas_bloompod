@@ -123,18 +123,26 @@
 
 .gg-copyright {
   grid-area: copyright;
-  text-align: right;
-  margin-right: 10px;
+  display: flex;
   margin-bottom: 12px;
   font-size: 15px;
   color: var(--gg-muted);
-  white-space: nowrap;
+  justify-content: flex-end; 
+  min-width: 0;  
 }
 
 .gg-copyright a {
   color: var(--gg-green-dark);
   text-decoration: underline;
   font-weight: 600;
+}
+
+.gg-copyright p {
+  margin-right: 15px;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+  flex: none;
 }
 
 /* ----- Nút ----- */
@@ -1118,7 +1126,9 @@
 /* =====================================================================
    RESPONSIVE
    ===================================================================== */
-@media (max-width: 1800px) {}
+@media (max-width: 1800px) {
+  
+}
 
 @media (max-width: 1200px) {
   .gg-track {
@@ -1148,6 +1158,10 @@
   .gg-contribution {
     padding-top: 0;
   }
+
+  .gg-contact br{
+    display:block;
+  }
 }
 
 @media (max-width: 992px) {
@@ -1173,7 +1187,7 @@
   }
 
   .gg-choose {
-    grid-template-columns: 34% 1fr;
+    grid-template-columns: 34% 1fr auto;
     grid-template-areas: 
       "media copy copy"
       "media contact copyright";
